@@ -19,15 +19,15 @@ The design of SE-PINN is based on https://arxiv.org/abs/2203.00451 and https://a
 In addition, SE-PINN supports the following features:
 - L-BFGS optimization
 - A class that supports deterministic training, checkpointing of training, and visualization
-- `pip install sepinn` — A Python package on PyPI with CI/CD
-- Documentation as a [webpage](https://tiger-du.github.io/sepinn.html) and a [Google Colab notebook](https://colab.research.google.com/github/Tiger-Du/SE-PINN/blob/main/docs/quantum_harmonic_oscillator.ipynb
+- A Python package on PyPI with CI/CD (`pip install sepinn`)
+- Documentation as a [webpage](https://tiger-du.github.io/sepinn.html) and a [Google Colab notebook](https://colab.research.google.com/github/SE-PINN/SE-PINN/blob/main/docs/quantum_harmonic_oscillator.ipynb
 )
 
 <h2 align="center">Example</h2>
 
-__Figure 1__ and __Figure 2__ are both visualizations of the ground state (_left_) and the energy of the ground state (_right_) that are predicted by SE-PINN as it trains. The physical system of interest is the __quantum harmonic oscillator__, which is used to model diatomic molecules such as diatomic nitrogen, diatomic oxygen, and the hydrogen halides.
+__Figure 1__ and __Figure 2__ are both visualizations of the ground state (_left_) and the energy of the ground state (_right_) that are predicted by SE-PINN as it trains. The physical system of interest here is the __quantum harmonic oscillator__, which is used to model diatomic molecules such as diatomic nitrogen, diatomic oxygen, and the hydrogen halides.
 
-As visualized in __Figure 2__, constraining SE-PINN via a special architectural layer — a __hub layer__ — to predict the ground state with exact symmetry improves its convergence to both the correct ground state and the correct energy.
+As visualized in __Figure 2__, constraining SE-PINN via a special architectural layer — a __hub layer__ — to predict a ground state that satisfies exact symmetry improves its convergence to both the correct ground state and the correct energy.
 
 | **Figure 1**: SE-PINN without Enforcement of Symmetry |
 | --- |
@@ -61,11 +61,11 @@ A Jupyter notebook is available for reference in the `docs` folder as well as th
 
 __Google Colab__ (_Interactive_):
 
-https://colab.research.google.com/github/Tiger-Du/SE-PINN/blob/main/docs/quantum_harmonic_oscillator.ipynb
+https://colab.research.google.com/github/SE-PINN/SE-PINN/blob/main/docs/quantum_harmonic_oscillator.ipynb
 
 __nbviewer__ (_Non-interactive_):
 
-https://nbviewer.org/github/Tiger-Du/SE-PINN/blob/main/docs/quantum_harmonic_oscillator.ipynb
+https://nbviewer.org/github/SE-PINN/SE-PINN/blob/main/docs/quantum_harmonic_oscillator.ipynb
 
 <h2 align="center">Citation</h2>
 
