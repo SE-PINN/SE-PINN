@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://tiger-du.github.io/sepinn.html">Webpage</a> |
-  <a href="https://github.com/Tiger-Du/SE-PINN">GitHub</a> |
+  <a href="https://github.com/SE-PINN/SE-PINN">GitHub</a> |
   <a href="https://pypi.org/project/sepinn/">PyPI</a>
 </p>
 
@@ -25,7 +25,7 @@ In addition, SE-PINN supports the following features:
 
 <h2 align="center">Example</h2>
 
-__Figure 1__ and __Figure 2__ are both visualizations of the ground state (_left_) and the energy of the ground state (_right_) that are predicted by SE-PINN as it trains. The physical system of interest here is the __quantum harmonic oscillator__, which is used to model diatomic molecules such as diatomic nitrogen, diatomic oxygen, and the hydrogen halides.
+__Figure 1__ and __Figure 2__ are both visualizations of the ground state (_left_) and the energy of the ground state (_right_) that are predicted by SE-PINN as it trains. The physical system of interest here is the __quantum harmonic oscillator__, which can be used to model diatomic molecules such as diatomic nitrogen, diatomic oxygen, and the hydrogen halides.
 
 As visualized in __Figure 2__, constraining SE-PINN via a special architectural layer — a __hub layer__ — to predict a ground state that satisfies exact symmetry improves its convergence to both the correct ground state and the correct energy.
 
