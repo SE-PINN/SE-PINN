@@ -6,11 +6,11 @@
   <a href="https://pypi.org/project/sepinn/">PyPI</a>
 </p>
 
-<img src=https://raw.githubusercontent.com/Tiger-Du/SE-PINN/main/assets/enforcement_of_symmetry.gif>
+<img src=https://raw.githubusercontent.com/SE-PINN/SE-PINN/main/assets/enforcement_of_symmetry.gif>
 
 SE-PINN is a physics-informed neural network in PyTorch that solves the Schrödinger equation of quantum mechanics.
 
-Through (a) a custom __loss function__ and (b) a custom __neural-network layer__, SE-PINN is constrained to predict quantum-mechanical states that satisfy the mathematical-physical properties of __symmetry__, __normality__, and __orthogonality__. In addition, the model learns not through supervised learning on labeled data but through __unsupervised learning__ via feedback from the Schrödinger equation itself.
+Through (a) a custom __loss function__ and (b) a custom __neural-network layer__, SE-PINN is constrained to predict quantum-mechanical states that satisfy the mathematical-physical properties of __symmetry__, __normality__, __orthogonality__, and __consistency__. In addition, the model learns not through supervised learning on labeled data but through __unsupervised learning__ via feedback from the Schrödinger equation itself.
 
 SE-PINN was developed at Vanderbilt University by Tiger Du and Alexander Ahrens under the supervision of Prof. Ipek Oguz (https://engineering.vanderbilt.edu/bio/?pid=ipek-oguz).
 
@@ -31,11 +31,11 @@ As visualized in __Figure 2__, constraining SE-PINN via a special architectural 
 
 | **Figure 1**: SE-PINN without Enforcement of Symmetry |
 | --- |
-| <img src=https://raw.githubusercontent.com/Tiger-Du/SE-PINN/main/assets/no_enforcement_of_symmetry.gif> |
+| <img src=https://raw.githubusercontent.com/SE-PINN/SE-PINN/main/assets/no_enforcement_of_symmetry.gif> |
 
 | **Figure 2**: SE-PINN with Enforcement of Symmetry |
 | --- |
-| <img src=https://raw.githubusercontent.com/Tiger-Du/SE-PINN/main/assets/enforcement_of_symmetry.gif> |
+| <img src=https://raw.githubusercontent.com/SE-PINN/SE-PINN/main/assets/enforcement_of_symmetry.gif> |
 
 <h2 align="center">Usage</h2>
 
