@@ -7,6 +7,7 @@ import sys
 
 try:
     import IPython
+    import IPython.display
     import matplotlib_inline
 
     matplotlib_inline.backend_inline.set_matplotlib_formats("retina")
@@ -138,7 +139,7 @@ class PINN:
         # Current values of metrics.
         self.cur_loss = 0
         self.cur_energy = 0
-        self.cur_wf = 0
+        self.cur_wf = torch.zeros_like(self.x)
 
         # All values of metrics.
         self.losses = []
@@ -296,10 +297,10 @@ class PINN:
         _ = plt.figure(figsize=(6.4, 4.8))
 
         if idx is None:
-            psi = self.cur_wf
+            psi = self.cur_wf.detach()
             energy = self.cur_energy
         else:
-            psi = self.wfs[idx]
+            psi = self.wfs[idx].detach()
             energy = self.energies[idx]
         norm = torch.sum(psi**2) * self.dx
 
@@ -384,6 +385,8 @@ class PINN:
                 ax.set_xlim([epoch_range[0], epoch_range[1]])
                 ax.grid(alpha=0.2)
                 ax.legend()
+
+                return []
 
             ani = FuncAnimation(fig, plot_frame, frames=num_frames - 1, interval=300)
             ani.save(filename + ".gif", dpi=200, writer=PillowWriter(fps=50))
