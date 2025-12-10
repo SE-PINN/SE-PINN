@@ -6,6 +6,8 @@ import torch.nn as nn
 
 from sepinn.hub_layer import HubLayer
 
+__all__ = ["BasePINN"]
+
 
 # This is a shortcut to plot pytorch tensors (they need to be in numpy form for matplotlib).
 def to_plot(x):

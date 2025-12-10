@@ -5,6 +5,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+__all__ = ["HubLayer"]
+
 
 class HubLayer(nn.Module):
     """

@@ -30,6 +30,8 @@ from rich.progress import (
 
 from sepinn.base_pinn import BasePINN
 
+__all__ = ["PINN"]
+
 plt.rcParams["figure.figsize"] = (6.4, 4.8)
 
 
