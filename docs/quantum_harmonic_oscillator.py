@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import torch
+import torch.nn as nn
 from matplotlib.animation import FuncAnimation, PillowWriter
 
 # !pip install latex
@@ -10,8 +12,7 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 # import scienceplots # Temporary
 # plt.style.use(['science','grid'])
 from scipy.linalg import eigh_tridiagonal  # eigvalsh_tridiagonal
-import torch
-import torch.nn as nn
+
 # import torch.nn.functional as F
 
 # !export LC_ALL="en_US.UTF-8"
