@@ -16,4 +16,4 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://tiger-du.github.io/sepinn.html"
-Repository = "https://github.com/Tiger-Du/SE-PINN"
+Repository = "https://github.com/SE-PINN/SE-PINN"

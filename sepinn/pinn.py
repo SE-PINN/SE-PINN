@@ -7,11 +7,13 @@ import torch.nn as nn
 from sepinn.hublayer import HubLayer
 
 # Optional Hardware Acceleration
-if torch.cuda.is_available(): # Use T4 GPU on Google Colab
+if torch.cuda.is_available():  # Use T4 GPU on Google Colab
     torch.cuda.init()
     torch.cuda.is_initialized()
-    torch.set_default_tensor_type('torch.cuda.FloatTensor') # torch.set_default_dtype() and torch.set_default_device()
-    device = "cuda" # torch.device("cuda")
+    torch.set_default_tensor_type(
+        "torch.cuda.FloatTensor"
+    )  # torch.set_default_dtype() and torch.set_default_device()
+    device = "cuda"  # torch.device("cuda")
 else:
     device = "cpu"
 
@@ -19,10 +21,13 @@ else:
 # import torch_xla.core.xla_model as xm
 # device = xm.xla_device()
 
-torch.manual_seed(0) # Specify the random seed for reproducibility.
+torch.manual_seed(0)  # Specify the random seed for reproducibility.
+
 
 # This is a shortcut to plot pytorch tensors (they need to be in numpy form for matplotlib).
-def to_plot(x): return x.detach().cpu().numpy()
+def to_plot(x):
+    return x.detach().cpu().numpy()
+
 
 class PINN(nn.Module):
     """
@@ -52,7 +57,7 @@ class PINN(nn.Module):
         Forward pass.
     """
 
-    def  __init__(self, grid_params, activation, sym = 0):
+    def __init__(self, grid_params, activation, sym=0):
         super(PINN, self).__init__()
 
         self.x0, self.xN, self.dx, self.N = grid_params
@@ -61,18 +66,18 @@ class PINN(nn.Module):
 
         # Architecture of the Model
 
-        self.energy_node = nn.Linear(1,1)
-        self.fc1_bypass = nn.Linear(1,50)
-        self.fc1 = nn.Linear(2,50)
-        self.fc2 = nn.Linear(50,50)
+        self.energy_node = nn.Linear(1, 1)
+        self.fc1_bypass = nn.Linear(1, 50)
+        self.fc1 = nn.Linear(2, 50)
+        self.fc2 = nn.Linear(50, 50)
 
         # Automatic detection of whether to enforce even symmetry or odd symmetry via a hub layer
         if sym == 1:
-            self.output = HubLayer(50, 1, 1, 0) # Even Symmetry
+            self.output = HubLayer(50, 1, 1, 0)  # Even Symmetry
         elif sym == -1:
-            self.output = HubLayer(50, 1, 0, 1) # Odd Symmetry
+            self.output = HubLayer(50, 1, 0, 1)  # Odd Symmetry
         else:
-            self.output = nn.Linear(50,1)
+            self.output = nn.Linear(50, 1)
 
     def swap_symmetry(self):
         if self.sym == 0:
@@ -84,10 +89,10 @@ class PINN(nn.Module):
         # lambda layer for energy
         energy = self.energy_node(torch.ones_like(x))
 
-        N = torch.cat((x,energy),1)
+        N = torch.cat((x, energy), 1)
         N = self.activation(self.fc1(N))
         N = self.activation(self.fc2(N))
-        N = self.output(N) # where symmetrization occurs if enforced
+        N = self.output(N)  # where symmetrization occurs if enforced
 
         wf = N
 

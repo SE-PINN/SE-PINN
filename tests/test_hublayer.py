@@ -1,12 +1,12 @@
 from itertools import permutations
 
-import torch.nn as nn
-
 import pytest
+import torch.nn as nn
 
 from sepinn.hublayer import HubLayer
 
-class TestInitialization():
+
+class TestInitialization:
     def test_class(self):
         hub_layer = HubLayer(50, 50, 0, 0)
 
@@ -21,7 +21,7 @@ class TestInitialization():
         hub_layer = HubLayer(50, 50, 0, 0)
 
         assert hub_layer.size_out == 50
-    
+
     def test_even(self):
         hub_layer = HubLayer(50, 50, 0, 0)
 
@@ -42,10 +42,11 @@ class TestInitialization():
 
         assert isinstance(hub_layer.bias, nn.Parameter)
 
+
 def test_flip_sym():
     for even, odd in permutations((1, 0)):
         hub_layer = HubLayer(50, 50, even, odd)
-        
+
         hub_layer.flip_sym()
 
         assert hub_layer.even == odd

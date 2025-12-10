@@ -1,7 +1,6 @@
+import pytest
 import torch
 import torch.nn as nn
-
-import pytest
 
 from sepinn.pinn import PINN
 
@@ -12,9 +11,10 @@ grid_params = x0, xN, dx, N
 
 x = torch.linspace(x0, xN, N - 1).view(-1, 1)
 k = 100
-V = 0.5 * k * x ** 2
+V = 0.5 * k * x**2
 
-class TestInitialization():
+
+class TestInitialization:
     def test_class(self):
         model = PINN(grid_params, activation=torch.tanh)
 
@@ -29,7 +29,7 @@ class TestInitialization():
         model = PINN(grid_params, activation=torch.tanh)
 
         assert model.activation == torch.tanh
-    
+
     def test_sym(self):
         model = PINN(grid_params, activation=torch.tanh)
 
@@ -50,10 +50,6 @@ class TestInitialization():
 
         assert isinstance(model.fc1, nn.Linear)
 
-    def test_fc1(self):
-        model = PINN(grid_params, activation=torch.tanh)
-
-        assert isinstance(model.fc1, nn.Linear)
 
 def test_swap_symmetry():
     model = PINN(grid_params, activation=torch.tanh)

@@ -5,6 +5,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+
 class HubLayer(nn.Module):
     """
     Hub layer, which is used to constrain the prediction of the model to respect even symmetry
@@ -64,12 +65,13 @@ class HubLayer(nn.Module):
         return
 
     def forward(self, x):
-        h_plus = x # x(t)
-        h_minus = torch.flip(x, [0]) # x(-t)
+        h_plus = x  # x(t)
+        h_minus = torch.flip(x, [0])  # x(-t)
         H_plus = h_plus + h_minus
         H_minus = h_plus - h_minus
 
-        N = ((self.even * (1/2) * torch.mm(H_plus, self.weights.t()))
-           + (self.odd * (1/2) * torch.mm(H_minus, self.weights.t())))
+        N = (self.even * (1 / 2) * torch.mm(H_plus, self.weights.t())) + (
+            self.odd * (1 / 2) * torch.mm(H_minus, self.weights.t())
+        )
 
         return N
