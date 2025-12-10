@@ -1,6 +1,5 @@
 import pytest
 import torch
-import torch.nn as nn
 
 from sepinn.pinn import PINN
 
@@ -13,47 +12,78 @@ x = torch.linspace(x0, xN, N - 1).view(-1, 1)
 k = 100
 V = 0.5 * k * x**2
 
+params = {
+    "grid_params": grid_params,
+    "activation": torch.tanh,
+    "potential": V,
+    "sym": 1,
+}
+
 
 class TestInitialization:
-    def test_class(self):
-        model = PINN(grid_params, activation=torch.tanh)
+    def test_V(self):
+        pinn = PINN(**params)
 
-        assert isinstance(model, PINN)
+        assert (pinn.V == V).all()
 
-    def test_grid_params(self):
-        model = PINN(grid_params, activation=torch.tanh)
+    def test_cur_loss(self):
+        pinn = PINN(**params)
 
-        assert model.x0 == grid_params[0]
+        assert pinn.cur_loss == 0
 
-    def test_activation(self):
-        model = PINN(grid_params, activation=torch.tanh)
+    def test_cur_energy(self):
+        pinn = PINN(**params)
 
-        assert model.activation == torch.tanh
+        assert pinn.cur_energy == 0
 
-    def test_sym(self):
-        model = PINN(grid_params, activation=torch.tanh)
+    def test_cur_wf(self):
+        pinn = PINN(**params)
 
-        assert model.sym == 0
+        assert pinn.cur_wf == 0
 
-    def test_energy_node(self):
-        model = PINN(grid_params, activation=torch.tanh)
+    def test_losses(self):
+        pinn = PINN(**params)
 
-        assert isinstance(model.energy_node, nn.Linear)
+        assert pinn.losses == []
 
-    def test_fc1_bypass(self):
-        model = PINN(grid_params, activation=torch.tanh)
+    def test_energies(self):
+        pinn = PINN(**params)
 
-        assert isinstance(model.fc1_bypass, nn.Linear)
+        assert pinn.energies == []
 
-    def test_fc1(self):
-        model = PINN(grid_params, activation=torch.tanh)
+    def test_wfs(self):
+        pinn = PINN(**params)
 
-        assert isinstance(model.fc1, nn.Linear)
+        assert pinn.wfs == []
+
+    def test_basis(self):
+        pinn = PINN(**params)
+
+        assert pinn.basis == []
+
+    def test_basis_sum(self):
+        pinn = PINN(**params)
+
+        assert isinstance(pinn.basis_sum, torch.Tensor)
 
 
-def test_swap_symmetry():
-    model = PINN(grid_params, activation=torch.tanh)
+def test_init_optimizer():
+    pinn = PINN(**params)
 
-    model.swap_symmetry()
+    pinn.init_optimizer(optim="LBFGS")
 
-    assert model.sym == 0
+    assert pinn.opt_name == "LBFGS"
+
+    pinn.init_optimizer(optim="Adam")
+
+    assert pinn.opt_name == "Adam"
+
+
+def test_change_lr():
+    pinn = PINN(**params)
+    pinn.init_optimizer(optim="LBFGS")
+
+    for lr in range(1, 1000):
+        lr = 1 / lr
+        pinn.change_lr(lr)
+        assert pinn.opt.param_groups[0]["lr"] == lr

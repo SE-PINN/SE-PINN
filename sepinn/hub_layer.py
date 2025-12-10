@@ -8,25 +8,26 @@ import torch.nn as nn
 
 class HubLayer(nn.Module):
     """
-    Hub layer, which is used to constrain the prediction of the model to respect even symmetry
-    (symmetry about f(x) = 0) or odd symmetry (symmetry about f(x) = x). The mathematical basis is
-    presented at https://arxiv.org/pdf/1904.08991.pdf. The constructor is adapted from
-    https://auro-227.medium.com/writing-a-custom-layer-in-pytorch-14ab6ac94b77.
+    A hub layer, which is used to constrain the prediction of the model
+    to respect even symmetry (symmetry about f(x) = 0) or odd symmetry
+    (symmetry about f(x) = x). The mathematical basis is presented at
+    https://arxiv.org/pdf/1904.08991.pdf. The constructor is adapted
+    from https://auro-227.medium.com/writing-a-custom-layer-in-pytorch-14ab6ac94b77.
 
     Attributes
     ----------
     size_in : int
-        the length of the input of the layer
+        The length of the input of the layer.
     size_out : int
-        the length of the output of the layer
+        The length of the output of the layer.
     weights : torch.nn.parameter.Parameter
-        the weights of the layer
+        The weights of the layer.
     bias : torch.nn.parameter.Parameter
-        the bias of the layer
+        The bias of the layer.
     even : int
-        1 to enforce even symmetry
+        1 to enforce even symmetry.
     odd : int
-        -1 to enforce odd symmetry
+        -1 to enforce odd symmetry.
 
     Methods
     -------
@@ -51,10 +52,10 @@ class HubLayer(nn.Module):
         self.even = even
         self.odd = odd
 
-        # Initialization of Weights
+        # Initialization of Weights (Kaiming Initialization)
         nn.init.kaiming_uniform_(self.weights, a=np.sqrt(5))
 
-        # Initialization of Biases
+        # Initialization of Biases (LeCun Initialization)
         fan_in, _ = nn.init._calculate_fan_in_and_fan_out(self.weights)
         bound = 1 / np.sqrt(fan_in)
         nn.init.uniform_(self.bias, -bound, bound)
@@ -65,8 +66,9 @@ class HubLayer(nn.Module):
         return
 
     def forward(self, x):
-        h_plus = x  # x(t)
-        h_minus = torch.flip(x, [0])  # x(-t)
+        h_plus = x  # This is x(t).
+        h_minus = torch.flip(x, [0])  # This is x(-t).
+
         H_plus = h_plus + h_minus
         H_minus = h_plus - h_minus
 
