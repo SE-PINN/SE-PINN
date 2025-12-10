@@ -69,20 +69,20 @@ class TestInitialization:
 def test_init_optimizer():
     pinn = PINN(**params)
 
-    pinn.init_optimizer(optim="LBFGS")
+    pinn.init_optimizer(optimizer_name="LBFGS")
 
-    assert pinn.opt_name == "LBFGS"
+    assert pinn.optimizer_name == "LBFGS"
 
-    pinn.init_optimizer(optim="Adam")
+    pinn.init_optimizer(optimizer_name="Adam")
 
-    assert pinn.opt_name == "Adam"
+    assert pinn.optimizer_name == "Adam"
 
 
 def test_change_lr():
     pinn = PINN(**params)
-    pinn.init_optimizer(optim="LBFGS")
+    pinn.init_optimizer(optimizer_name="LBFGS")
 
     for lr in range(1, 1000):
         lr = 1 / lr
         pinn.change_lr(lr)
-        assert pinn.opt.param_groups[0]["lr"] == lr
+        assert pinn.optimizer.param_groups[0]["lr"] == lr

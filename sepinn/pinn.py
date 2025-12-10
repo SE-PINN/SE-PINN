@@ -5,9 +5,16 @@ import os
 import random
 import sys
 
-import IPython
+try:
+    import IPython
+    import matplotlib_inline
+
+    matplotlib_inline.backend_inline.set_matplotlib_formats("retina")
+    IN_NOTEBOOK = True
+except (ImportError, NotImplementedError):
+    IN_NOTEBOOK = False
+
 import matplotlib.pyplot as plt
-import matplotlib_inline
 import numpy as np
 import torch
 from matplotlib.animation import FuncAnimation, PillowWriter
@@ -20,9 +27,8 @@ from rich.progress import (
     track,
 )
 
-from sepinn.pinn import BasePINN
+from sepinn.base_pinn import BasePINN
 
-matplotlib_inline.backend_inline.set_matplotlib_formats("retina")
 plt.rcParams["figure.figsize"] = (6.4, 4.8)
 
 
@@ -384,9 +390,12 @@ class PINN:
             plt.close()
 
         if display:
-            if "google.colab" in sys.modules:
-                filename = "/content/" + filename + ".gif"
-            else:
-                filename = filename + ".gif"
+            if IN_NOTEBOOK:
+                if "google.colab" in sys.modules:
+                    filename = "/content/" + filename + ".gif"
+                else:
+                    filename = filename + ".gif"
 
-            IPython.display.display(IPython.display.Image(filename=filename))
+                IPython.display.display(IPython.display.Image(filename=filename))
+            else:
+                print(f"Animation saved to {filename}.gif")
