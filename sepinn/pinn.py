@@ -225,13 +225,13 @@ class PINN:
 
     def train(self, epochs=10):
         for _ in track(range(epochs), description="Training... "):
-            if self.optimizer_name == "LBFGS":
+            if isinstance(self.optimizer, torch.optim.LBFGS):
                 loss = self.optimizer.step(self.closure)
 
                 if loss.item() == torch.nan:
                     print("The loss is NAN.")
                     break
-            elif self.optimizer_name == "Adam":
+            elif isinstance(self.optimizer, torch.optim.Adam):
                 self.optimizer.zero_grad()
                 loss = self.loss_fn(self.x)
                 loss.backward()
