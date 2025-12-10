@@ -17,3 +17,10 @@ dependencies = [
 [project.urls]
 Homepage = "https://tiger-du.github.io/sepinn.html"
 Repository = "https://github.com/SE-PINN/SE-PINN"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.5.0",
+    "pytest>=9.0.2",
+    "ruff>=0.14.8",
+]

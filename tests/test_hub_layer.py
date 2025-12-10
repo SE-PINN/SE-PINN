@@ -1,6 +1,5 @@
 from itertools import permutations
 
-import pytest
 import torch.nn as nn
 
 from sepinn.hub_layer import HubLayer

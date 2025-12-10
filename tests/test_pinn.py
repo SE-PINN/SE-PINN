@@ -1,4 +1,3 @@
-import pytest
 import torch
 
 from sepinn.pinn import PINN

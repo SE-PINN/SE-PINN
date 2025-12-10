@@ -4,11 +4,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter
+
 # !pip install latex
 # !pip install git+https://github.com/garrettj403/SciencePlots # Temporary
 # import scienceplots # Temporary
 # plt.style.use(['science','grid'])
-from scipy.linalg import eigh_tridiagonal # eigvalsh_tridiagonal
+from scipy.linalg import eigh_tridiagonal  # eigvalsh_tridiagonal
 import torch
 import torch.nn as nn
 # import torch.nn.functional as F
@@ -19,11 +20,13 @@ import torch.nn as nn
 # !ldconfig /usr/lib64-nvidia
 
 # Optional Hardware Acceleration
-if torch.cuda.is_available(): # Use T4 GPU on Google Colab
+if torch.cuda.is_available():  # Use T4 GPU on Google Colab
     torch.cuda.init()
     torch.cuda.is_initialized()
-    torch.set_default_tensor_type('torch.cuda.FloatTensor') # torch.set_default_dtype() and torch.set_default_device()
-    device = "cuda" # torch.device("cuda")
+    torch.set_default_tensor_type(
+        "torch.cuda.FloatTensor"
+    )  # torch.set_default_dtype() and torch.set_default_device()
+    device = "cuda"  # torch.device("cuda")
 else:
     device = "cpu"
 
@@ -31,12 +34,16 @@ else:
 # import torch_xla.core.xla_model as xm
 # device = xm.xla_device()
 
-torch.manual_seed(0) # Specify the random seed for reproducibility.
+torch.manual_seed(0)  # Specify the random seed for reproducibility.
+
 
 # This is a shortcut to plot pytorch tensors (they need to be in numpy form for matplotlib).
-def to_plot(x): return x.detach().cpu().numpy()
+def to_plot(x):
+    return x.detach().cpu().numpy()
+
 
 """### __(2/5) Definition of PINN__"""
+
 
 class PINN(nn.Module):
     """
@@ -66,7 +73,7 @@ class PINN(nn.Module):
         Forward pass.
     """
 
-    def  __init__(self, grid_params, activation, sym = 0):
+    def __init__(self, grid_params, activation, sym=0):
         super(PINN, self).__init__()
 
         self.x0, self.xN, self.dx, self.N = grid_params
@@ -75,18 +82,18 @@ class PINN(nn.Module):
 
         # Architecture of the Model
 
-        self.energy_node = nn.Linear(1,1)
-        self.fc1_bypass = nn.Linear(1,50)
-        self.fc1 = nn.Linear(2,50)
-        self.fc2 = nn.Linear(50,50)
+        self.energy_node = nn.Linear(1, 1)
+        self.fc1_bypass = nn.Linear(1, 50)
+        self.fc1 = nn.Linear(2, 50)
+        self.fc2 = nn.Linear(50, 50)
 
         # Automatic detection of whether to enforce even symmetry or odd symmetry via a hub layer
         if sym == 1:
-            self.output = HubLayer(50, 1, 1, 0) # Even Symmetry
+            self.output = HubLayer(50, 1, 1, 0)  # Even Symmetry
         elif sym == -1:
-            self.output = HubLayer(50, 1, 0, 1) # Odd Symmetry
+            self.output = HubLayer(50, 1, 0, 1)  # Odd Symmetry
         else:
-            self.output = nn.Linear(50,1)
+            self.output = nn.Linear(50, 1)
 
     def swap_symmetry(self):
         if self.sym == 0:
@@ -98,14 +105,15 @@ class PINN(nn.Module):
         # lambda layer for energy
         energy = self.energy_node(torch.ones_like(x))
 
-        N = torch.cat((x,energy),1)
+        N = torch.cat((x, energy), 1)
         N = self.activation(self.fc1(N))
         N = self.activation(self.fc2(N))
-        N = self.output(N) # where symmetrization occurs if enforced
+        N = self.output(N)  # where symmetrization occurs if enforced
 
         wf = N
 
         return wf, energy
+
 
 class HubLayer(nn.Module):
     """
@@ -166,19 +174,22 @@ class HubLayer(nn.Module):
         return
 
     def forward(self, x):
-        h_plus = x # x(t)
-        h_minus = torch.flip(x, [0]) # x(-t)
+        h_plus = x  # x(t)
+        h_minus = torch.flip(x, [0])  # x(-t)
         H_plus = h_plus + h_minus
         H_minus = h_plus - h_minus
 
-        N = ((self.even * (1/2) * torch.mm(H_plus, self.weights.t()))
-           + (self.odd * (1/2) * torch.mm(H_minus, self.weights.t())))
+        N = (self.even * (1 / 2) * torch.mm(H_plus, self.weights.t())) + (
+            self.odd * (1 / 2) * torch.mm(H_minus, self.weights.t())
+        )
 
         return N
 
+
 """### __(3/5) Definition of Wrapped PINN__"""
 
-class WrappedPINN():
+
+class WrappedPINN:
     def __init__(self, grid_params, activation, potential, sym):
         self.x0, self.xN, self.dx, self.N = grid_params
 
@@ -202,7 +213,7 @@ class WrappedPINN():
         self.energies = []
         self.wfs = []
 
-    def init_optimizer(self, optim, lr = 1e-2):
+    def init_optimizer(self, optim, lr=1e-2):
         if optim == "LBFGS":
             self.opt = torch.optim.LBFGS(self.model.parameters(), lr=lr)
         elif optim == "Adam":
@@ -211,11 +222,11 @@ class WrappedPINN():
             print("Invalid Optimizer")
         self.opt_name = optim
 
-    def change_lr(self,lr):
+    def change_lr(self, lr):
         """
         On-the-fly (runtime) control of the learning rate.
         """
-        self.opt.param_groups[0]['lr'] = lr
+        self.opt.param_groups[0]["lr"] = lr
 
     def swap_symmetry(self):
         """
@@ -240,14 +251,16 @@ class WrappedPINN():
         wf, energy = self.model(self.x)
 
         d = torch.autograd.grad(wf.sum(), x, create_graph=True)[0]
-        dd = torch.autograd.grad(d.sum(), x, create_graph=True)[0] # 2nd derivative
+        dd = torch.autograd.grad(d.sum(), x, create_graph=True)[0]  # 2nd derivative
         SE_loss = torch.sum((-0.5 * dd + self.V * wf - energy * wf) ** 2) / self.N
 
-        NL_loss = (torch.sum(wf ** 2) - 1 / self.dx) ** 2
+        NL_loss = (torch.sum(wf**2) - 1 / self.dx) ** 2
 
         Orth_loss = (torch.sum(wf * self.basis_sum) * self.dx) ** 2
 
-        loss = SE_loss + NL_loss + Orth_loss + 0.5 * (wf[0] ** 2 + wf[-1] ** 2) # boundary loss
+        loss = (
+            SE_loss + NL_loss + Orth_loss + 0.5 * (wf[0] ** 2 + wf[-1] ** 2)
+        )  # boundary loss
 
         self.cur_wf, self.cur_energy, self.cur_loss = wf, energy[0].item(), loss.item()
 
@@ -273,15 +286,15 @@ class WrappedPINN():
 
     def plot_loss(self):
         plt.plot(self.losses)
-        plt.yscale('log')
+        plt.yscale("log")
         plt.xlabel("Epoch")
         plt.ylabel("Loss")
-        plt.title('Loss during Training')
+        plt.title("Loss during Training")
         plt.show()
 
     def plot_energy(self):
         plt.plot(self.energies)
-        plt.title('Predicted Energy Eigenvalue during Training')
+        plt.title("Predicted Energy Eigenvalue during Training")
         plt.xlabel("Epoch")
         plt.ylabel("Energy Eigenvalue")
         plt.show()
@@ -292,16 +305,20 @@ class WrappedPINN():
             psi = self.cur_wf
         else:
             psi = self.wfs[idx]
-        plt.plot(to_plot(self.x), to_plot(psi), 'r-', linewidth=2, label='Prediction')
-        plt.plot(to_plot(self.x), -to_plot(psi), 'b-', linewidth=2, label='- Prediction')
+        plt.plot(to_plot(self.x), to_plot(psi), "r-", linewidth=2, label="Prediction")
+        plt.plot(
+            to_plot(self.x), -to_plot(psi), "b-", linewidth=2, label="- Prediction"
+        )
         if ref is not None:
-            plt.plot(to_plot(self.x), ref, 'k--', linewidth=2, label='Ground Truth')
+            plt.plot(to_plot(self.x), ref, "k--", linewidth=2, label="Ground Truth")
 
         plt.xlabel("x")
         plt.ylabel("Energy Eigenvector")
-        plt.title(f'Predicted Energy Eigenvector (E = {self.cur_energy:.2f}, norm = {torch.sum(psi ** 2) * self.dx:.2f})')
+        plt.title(
+            f"Predicted Energy Eigenvector (E = {self.cur_energy:.2f}, norm = {torch.sum(psi**2) * self.dx:.2f})"
+        )
         plt.legend()
-        plt.rcParams["figure.figsize"] = (6,4)
+        plt.rcParams["figure.figsize"] = (6, 4)
         plt.show()
 
     def create_gif(self, name, ref_wf=None, ref_ener=None, epoch_range=None):
@@ -309,31 +326,47 @@ class WrappedPINN():
             epoch_range = 0, len(self.losses)
         num_frames = epoch_range[1] - epoch_range[0]
 
-        fig, axes = plt.subplots(1, 2, figsize=(12,4))
+        fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+
         def animate(i):
             idx = epoch_range[0] + i
             ax = axes[0]
             ax.clear()
-            ax.plot(to_plot(self.x),  to_plot(self.wfs[idx]), 'r-', linewidth=2, label='Prediction')
-            ax.plot(to_plot(self.x), -to_plot(self.wfs[idx]), 'b-', linewidth=2, label='- Prediction')
+            ax.plot(
+                to_plot(self.x),
+                to_plot(self.wfs[idx]),
+                "r-",
+                linewidth=2,
+                label="Prediction",
+            )
+            ax.plot(
+                to_plot(self.x),
+                -to_plot(self.wfs[idx]),
+                "b-",
+                linewidth=2,
+                label="- Prediction",
+            )
             if ref_wf is not None:
-                ax.plot(to_plot(self.x), ref_wf,  'k--', linewidth=2, label='Ground Truth')
-            ax.set_title(f'Epoch {i}: Energy = {self.energies[idx]:.2f}')
+                ax.plot(
+                    to_plot(self.x), ref_wf, "k--", linewidth=2, label="Ground Truth"
+                )
+            ax.set_title(f"Epoch {i}: Energy = {self.energies[idx]:.2f}")
             ax.legend()
-            ax.set_ylim([-1.5,1.5])
+            ax.set_ylim([-1.5, 1.5])
 
             ax = axes[1]
             ax.clear()
-            ax.plot(np.arange(epoch_range[0],idx),self.energies[epoch_range[0]:idx])
-            ax.set_xlim([epoch_range[0],epoch_range[1]])
+            ax.plot(np.arange(epoch_range[0], idx), self.energies[epoch_range[0] : idx])
+            ax.set_xlim([epoch_range[0], epoch_range[1]])
             if ref_ener is not None:
-                ax.axhline(ref_ener, color='k', linestyle="--", label="Ground Truth")
-            ax.set_title('Energy')
+                ax.axhline(ref_ener, color="k", linestyle="--", label="Ground Truth")
+            ax.set_title("Energy")
             ax.legend()
 
         ani = FuncAnimation(fig, animate, frames=num_frames - 1, interval=500)
-        ani.save(name+".gif", dpi=100, writer=PillowWriter(fps=50))
+        ani.save(name + ".gif", dpi=100, writer=PillowWriter(fps=50))
         plt.close()
+
 
 def main():
     # Definition of Physical System (Quantum Harmonic Oscillator)
@@ -343,25 +376,25 @@ def main():
     dx = (xN - x0) / N
     grid_params = x0, xN, dx, N
 
-    x = torch.linspace(x0, xN, N+1).view(-1, 1)
+    x = torch.linspace(x0, xN, N + 1).view(-1, 1)
     k = 100
-    V = 0.5 * k * x ** 2
+    V = 0.5 * k * x**2
 
     # Solve via the numerical method.
 
-    diagonal = 1 / dx**2 + V[1:-1].detach().cpu().numpy()[:,0]
+    diagonal = 1 / dx**2 + V[1:-1].detach().cpu().numpy()[:, 0]
     edge = -0.5 / dx**2 * np.ones(diagonal.shape[0] - 1)
     energies, eigenvectors = eigh_tridiagonal(diagonal, edge)
 
     # Normalization of eigenvectors.
-    norms = dx * np.sum(eigenvectors ** 2, axis=0)
+    norms = dx * np.sum(eigenvectors**2, axis=0)
     eigenvectors /= np.sqrt(norms)
 
     gnd_state = eigenvectors.T[0]
     # gnd_energy = energies[0]
 
     x = torch.linspace(x0, xN, N - 1).view(-1, 1)
-    V = 0.5 * k * x ** 2
+    V = 0.5 * k * x**2
 
     """### __(5/5) Application of Wrapped PINN__"""
 
@@ -386,6 +419,7 @@ def main():
 
     # Visualization via animation.
     wrapped_pinn.create_gif("animation", ref_ener=energies[0], ref_wf=gnd_state)
+
 
 if __name__ == "__main__":
     main()
