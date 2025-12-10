@@ -56,7 +56,7 @@ random.seed(0)
 
 
 # Convenience Function for Plotting with PyTorch Tensors
-def to_plot(x):
+def _to_plot(x):
     return x.detach().cpu().numpy()
 
 
@@ -304,11 +304,11 @@ class PINN:
             energy = self.energies[idx]
         norm = torch.sum(psi**2) * self.dx
 
-        plt.plot(to_plot(self.x), to_plot(psi), "r-", label="Prediction")
-        plt.plot(to_plot(self.x), -to_plot(psi), "b-", label="- Prediction")
+        plt.plot(_to_plot(self.x), _to_plot(psi), "r-", label="Prediction")
+        plt.plot(_to_plot(self.x), -_to_plot(psi), "b-", label="- Prediction")
 
         if ref_wf is not None:
-            plt.plot(to_plot(self.x), ref_wf, "k--", label="Ground Truth")
+            plt.plot(_to_plot(self.x), ref_wf, "k--", label="Ground Truth")
 
         title = f"Energy Eigenvector (Norm of {norm:.2f} and Energy of "
         title += f"{energy:.2f})"
@@ -354,13 +354,16 @@ class PINN:
                 ax = axes[0]
                 ax.clear()
                 ax.plot(
-                    to_plot(self.x), to_plot(self.wfs[idx]), "r-", label="Prediction"
+                    _to_plot(self.x), _to_plot(self.wfs[idx]), "r-", label="Prediction"
                 )
                 ax.plot(
-                    to_plot(self.x), -to_plot(self.wfs[idx]), "b-", label="- Prediction"
+                    _to_plot(self.x),
+                    -_to_plot(self.wfs[idx]),
+                    "b-",
+                    label="- Prediction",
                 )
                 if ref_wf is not None:
-                    ax.plot(to_plot(self.x), ref_wf, "k--", label="Ground Truth")
+                    ax.plot(_to_plot(self.x), ref_wf, "k--", label="Ground Truth")
                 ax.set_title(f"Energy Eigenvector: Norm of {norm:.2f}", loc="left")
                 ax.set_xlabel("Position")
                 ax.set_ylabel("Probability Amplitude")

@@ -6,23 +6,6 @@ import torch.nn as nn
 
 from sepinn.hub_layer import HubLayer
 
-# Optional Hardware Acceleration
-if torch.cuda.is_available():  # Use T4 GPU on Google Colab
-    torch.cuda.init()
-    torch.cuda.is_initialized()
-    torch.set_default_tensor_type(
-        "torch.cuda.FloatTensor"
-    )  # torch.set_default_dtype() and torch.set_default_device()
-    device = "cuda"  # torch.device("cuda")
-else:
-    device = "cpu"
-
-# !pip install torch_xla[tpu]~=2.1.0 -f https://storage.googleapis.com/libtpu-releases/index.html
-# import torch_xla.core.xla_model as xm
-# device = xm.xla_device()
-
-torch.manual_seed(0)  # Specify the random seed for reproducibility.
-
 
 # This is a shortcut to plot pytorch tensors (they need to be in numpy form for matplotlib).
 def to_plot(x):
