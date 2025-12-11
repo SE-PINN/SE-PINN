@@ -38,7 +38,9 @@ class TestInitialization:
     def test_cur_wf(self):
         pinn = PINN(**params)
 
-        assert pinn.cur_wf == 0
+        assert isinstance(pinn.cur_wf, torch.Tensor)
+        assert pinn.cur_wf.shape == x.shape
+        assert (pinn.cur_wf == 0).all()
 
     def test_losses(self):
         pinn = PINN(**params)
