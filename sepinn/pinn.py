@@ -147,8 +147,8 @@ class PINN:
         self.basis_sum = torch.zeros_like(self.x)
 
         # Current values of metrics.
-        self.cur_loss = 0
-        self.cur_energy = 0
+        self.cur_loss = torch.tensor(0.0)
+        self.cur_energy = torch.tensor(0.0)
         self.cur_wf = torch.zeros_like(self.x)
 
         # All values of metrics.
