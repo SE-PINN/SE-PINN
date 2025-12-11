@@ -408,7 +408,7 @@ class PINN:
                 return []
 
             ani = FuncAnimation(fig, plot_frame, frames=num_frames - 1, interval=300)
-            ani.save(filename + ".gif", dpi=200, writer=PillowWriter(fps=50))
+            ani.save(filename + ".gif", dpi=100, writer=PillowWriter(fps=50))
             plt.close()
 
         if display:
