@@ -48,13 +48,15 @@ device = torch.device(device)
 print(f"Using {device}.")
 
 # Settings for Reproducibility
-torch.manual_seed(0)
+seed = 0
+torch.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)
 torch.backends.cudnn.benchmark = False
 torch.use_deterministic_algorithms(True)
 torch.utils.deterministic.fill_uninitialized_memory = True
 os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:2"  # cuBLAS
-np.random.seed(0)
-random.seed(0)
+np.random.seed(seed)
+random.seed(seed)
 
 
 # Convenience Function for Plotting with PyTorch Tensors
