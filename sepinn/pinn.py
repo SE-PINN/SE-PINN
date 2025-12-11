@@ -249,6 +249,9 @@ class PINN:
                 self._validate_loss(loss)
                 loss.backward()
                 self.optimizer.step()
+            else:
+                print("The optimizer is not supported by SE-PINN.")
+                return
 
             self.wfs.append(self.cur_wf)
             self.energies.append(self.cur_energy)
