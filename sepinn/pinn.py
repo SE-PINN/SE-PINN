@@ -227,17 +227,20 @@ class PINN:
 
         return loss
 
+    def _validate_loss(self, loss: torch.Tensor):
+        if not torch.isfinite(loss):
+            raise RuntimeError(f"Non-finite loss: {loss.item()}")
+
     def train(self, epochs=10):
         for _ in track(range(epochs), description="Training... "):
             if isinstance(self.optimizer, torch.optim.LBFGS):
                 loss = self.optimizer.step(self.closure)
 
-                if loss.item() == torch.nan:
-                    print("The loss is NAN.")
-                    break
+                self._validate_loss(loss)
             elif isinstance(self.optimizer, torch.optim.Adam):
                 self.optimizer.zero_grad()
                 loss = self.loss_fn(self.x)
+                self._validate_loss(loss)
                 loss.backward()
                 self.optimizer.step()
 
