@@ -228,8 +228,8 @@ class PINN:
         loss = SE_loss + normality_loss + orthogonality_loss + boundary_loss
 
         self.cur_wf = wf
-        self.cur_energy = energy[0].item()
-        self.cur_loss = loss.item()
+        self.cur_energy = energy[0]
+        self.cur_loss = loss
 
         return loss
 
@@ -253,9 +253,9 @@ class PINN:
                 print("The optimizer is not supported by SE-PINN.")
                 return
 
-            self.wfs.append(self.cur_wf)
-            self.energies.append(self.cur_energy)
-            self.losses.append(self.cur_loss)
+            self.wfs.append(self.cur_wf.detach().cpu())
+            self.energies.append(self.cur_energy.item())
+            self.losses.append(self.cur_loss.item())
 
     def plot(self, metrics=["loss", "energy", "wf"], ref_energy=None, ref_wf=None):
         def route(metric):
