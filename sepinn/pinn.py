@@ -37,14 +37,8 @@ plt.rcParams["figure.figsize"] = (6.4, 4.8)
 
 # Optional Hardware Acceleration
 # Use Runtime > Change runtime type > T4 GPU on Google Colab.
-if torch.cuda.is_available():
-    torch.cuda.init()
-    torch.cuda.is_initialized()
-    torch.set_default_tensor_type("torch.cuda.FloatTensor")
-    device = "cuda"
-else:
-    device = "cpu"
-device = torch.device(device)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+torch.set_default_device(device)
 print(f"Using {device}.")
 
 # Settings for Reproducibility
