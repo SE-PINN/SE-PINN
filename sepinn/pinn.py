@@ -198,9 +198,9 @@ class PINN:
         return loss
 
     def loss_fn(self, x):
-        self.x.requires_grad = True
+        x.requires_grad = True
 
-        wf, energy = self.model(self.x)
+        wf, energy = self.model(x)
 
         # First Derivative
         d = torch.autograd.grad(wf.sum(), x, create_graph=True)[0]
