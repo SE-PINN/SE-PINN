@@ -50,12 +50,14 @@ print(f"Using {device}.")
 # Settings for Reproducibility
 REPRODUCIBLE_MODE = False
 if REPRODUCIBLE_MODE:
+    # Seeds
     seed = 0
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
 
+    # Other Settings
     torch.backends.cudnn.benchmark = False
     torch.use_deterministic_algorithms(True)
     torch.utils.deterministic.fill_uninitialized_memory = True
@@ -253,6 +255,7 @@ class PINN:
                 print("The optimizer is not supported by SE-PINN.")
                 return
 
+            # Log metrics
             self.wfs.append(self.cur_wf.detach().cpu())
             self.energies.append(self.cur_energy.item())
             self.losses.append(self.cur_loss.item())
