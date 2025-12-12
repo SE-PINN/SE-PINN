@@ -72,7 +72,9 @@ class BasePINN(nn.Module):
         if isinstance(self.output_layer, HubLayer):
             self.output_layer.flip_sym()
         else:
-            print("Symmetry cannot be swapped because it is not enforced.")
+            print(
+                "Symmetry cannot be swapped because it is not being enforced at the moment."
+            )
 
     def forward(self, x):
         # Lambda Layer for Energy
