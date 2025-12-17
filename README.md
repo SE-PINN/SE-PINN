@@ -1,7 +1,7 @@
 <h1 align="center">SE-PINN</h1>
 
 <p align="center">
-  <a href="https://tiger-du.github.io/sepinn.html">Webpage</a> |
+  <a href="https://se-pinn.github.io/">Website</a> |
   <a href="https://github.com/SE-PINN/SE-PINN">GitHub</a> |
   <a href="https://pypi.org/project/sepinn/">PyPI</a>
 </p>
@@ -20,7 +20,7 @@ In addition, SE-PINN supports the following features:
 - L-BFGS optimization
 - A class that supports deterministic training, checkpointing of training, and visualization
 - A Python package on PyPI with CI/CD (`pip install sepinn`)
-- Documentation as a [webpage](https://tiger-du.github.io/sepinn.html) and a [Google Colab notebook](https://colab.research.google.com/github/SE-PINN/SE-PINN/blob/main/docs/quantum_harmonic_oscillator.ipynb
+- Documentation as a [website](https://se-pinn.github.io/) and a [Google Colab notebook](https://colab.research.google.com/github/SE-PINN/SE-PINN/blob/main/docs/quantum_harmonic_oscillator.ipynb
 )
 
 <h2 align="center">Example</h2>
