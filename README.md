@@ -12,7 +12,7 @@ SE-PINN is a physics-informed neural network in PyTorch that solves the Schrödi
 
 Through (a) a custom __loss function__ and (b) a custom __neural-network layer__, SE-PINN is constrained to predict quantum-mechanical states that satisfy the mathematical-physical properties of __symmetry__, __normality__, __orthogonality__, and __consistency__. In addition, the model learns not through supervised learning on labeled data but through __unsupervised learning__ via feedback from the Schrödinger equation itself.
 
-SE-PINN was developed at Vanderbilt University by Tiger Du and Alexander Ahrens under the supervision of Prof. Ipek Oguz (https://engineering.vanderbilt.edu/bio/?pid=ipek-oguz).
+SE-PINN was developed at Vanderbilt University by Tiger Du and Alexander Ahrens under the supervision of Prof. Ipek Oguz (https://engineering.vanderbilt.edu/bio/ipek-oguz/).
 
 The design of SE-PINN is based on https://arxiv.org/abs/2203.00451 and https://arxiv.org/abs/1904.08991.
 
